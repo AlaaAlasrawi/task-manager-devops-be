@@ -8,4 +8,10 @@ public interface AppUserRepository {
     AppUser getAppUserById(Long id);
 
     AppUser findByUsername(String username);
+
+    AppUser save(AppUser user);
+
+    boolean isUsernameAlreadyExists(String username);
+
+    boolean isEmailAlreadyExists(String email);
 }

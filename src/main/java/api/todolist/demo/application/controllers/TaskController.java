@@ -2,7 +2,6 @@ package api.todolist.demo.application.controllers;
 
 import api.todolist.demo.application.dtos.task.TaskRequest;
 import api.todolist.demo.application.mappers.ApplicationTaskMapper;
-import api.todolist.demo.application.rest.specs.TaskSpecs;
 import api.todolist.demo.domain.model.Task;
 import api.todolist.demo.domain.services.TaskService;
 import lombok.RequiredArgsConstructor;
@@ -39,12 +38,11 @@ public class TaskController {
     // to do (specification)
     @GetMapping
     public ResponseEntity<Page<Task>> getAllTasks(
-            TaskSpecs specs,
             @RequestParam(defaultValue = "0", name = "page") int page,
             @RequestParam(defaultValue = "10", name = "size") int size,
             @RequestParam(defaultValue = "title", name = "sortBy") String sortBy,
             @RequestParam(defaultValue = "asc", name = "sortDirection") String sortDirection) {
-        return ResponseEntity.ok(taskService.getAllTasks(specs, page, size, sortBy, sortDirection));
+        return ResponseEntity.ok(taskService.getAllTasks( page, size, sortBy, sortDirection));
     }
 
     @PatchMapping("/toggle/{id}")

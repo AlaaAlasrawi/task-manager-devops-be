@@ -30,4 +30,19 @@ public class AppUserAdapter implements AppUserRepository {
                 );
         return persistenceAppUserMapper.toDomain(entity);
     }
+
+    @Override
+    public AppUser save(AppUser user) {
+        return persistenceAppUserMapper.toDomain(appUserJpaRepository.save(persistenceAppUserMapper.toEntity(user)));
+    }
+
+    @Override
+    public boolean isUsernameAlreadyExists(String username) {
+        return appUserJpaRepository.existsByUsername(username);
+    }
+
+    @Override
+    public boolean isEmailAlreadyExists(String email) {
+        return appUserJpaRepository.existsByEmail(email);
+    }
 }

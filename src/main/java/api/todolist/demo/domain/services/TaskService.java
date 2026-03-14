@@ -70,10 +70,10 @@ public class TaskService {
         taskRepository.save(existing);
     }
 
-    public Page<Task> getAllTasks(Specification<?> specs, int page, int size, String sortBy, String sortDirection) {
+    public Page<Task> getAllTasks( int page, int size, String sortBy, String sortDirection) {
         AppUser appUser = identityProvider.currentIdentity();
 
-        return taskRepository.getAllTasksByUserId(specs, appUser.getId(), page, size, sortBy, sortDirection);
+        return taskRepository.getAllTasksByUserId( appUser.getId(), page, size, sortBy, sortDirection);
     }
 
     public void deleteAllTasks() {

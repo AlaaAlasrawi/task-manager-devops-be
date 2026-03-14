@@ -1,6 +1,5 @@
 package api.todolist.demo.configration.web;
 
-import net.kaczmarzyk.spring.data.jpa.web.SpecificationArgumentResolver;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -20,8 +19,4 @@ public class WebConfiguration implements WebMvcConfigurer {
                 .maxAge(3600);
     }
 
-    @Override
-    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new SpecificationArgumentResolver());
-    }
 }

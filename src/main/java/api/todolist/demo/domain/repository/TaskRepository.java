@@ -15,7 +15,7 @@ public interface TaskRepository {
 
     void updateTaskById(Long id, Task task);
 
-    Page<Task> getAllTasksByUserId(Specification<?> specs, Long appUserId, int page, int size, String sortBy, String sortDirection);
+    Page<Task> getAllTasksByUserId(Long appUserId, int page, int size, String sortBy, String sortDirection);
 
     void deleteAllTasksByUserId(Long id);
 

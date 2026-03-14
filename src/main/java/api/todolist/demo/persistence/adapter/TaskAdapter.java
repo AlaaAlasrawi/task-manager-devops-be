@@ -30,13 +30,12 @@ public class TaskAdapter implements TaskRepository {
     }
 
     @Override
-    public Page<Task> getAllTasksByUserId(Specification<?> specs, Long appUserId, int page, int size, String sortBy, String sortDirection) {
-        Specification<TaskEntity> specification = (Specification<TaskEntity>) specs;
+    public Page<Task> getAllTasksByUserId( Long appUserId, int page, int size, String sortBy, String sortDirection) {
 
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
         Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
 
-        Page<TaskEntity> entities = taskJpaRepository.findAll(specification, pageable);
+        Page<TaskEntity> entities = taskJpaRepository.findAll( pageable);
 
         List<Task> tasks = entities.getContent()
                 .stream()
