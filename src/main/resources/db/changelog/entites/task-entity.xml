@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- 1) TABLE ONLY -->
+    <changeSet id="002-01-create-table-task" author="you">
+        <createTable tableName="task">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="title" type="VARCHAR(255)"/>
+
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+
+            <!-- Boolean mapping: usually BOOLEAN (Postgres/MySQL 8), or BIT(1) (older MySQL).
+                 BOOLEAN works in many DBs; adjust if needed. -->
+            <column name="is_completed" type="BOOLEAN"/>
+
+            <!-- FK column lives on task table -->
+            <column name="app_user_id" type="BIGINT"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="task"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 2) NOT NULL CONSTRAINTS ONLY -->
+    <changeSet id="002-02-not-null-task" author="you">
+        <!-- JPA says nullable = false on app_user_id -->
+        <addNotNullConstraint tableName="task" columnName="app_user_id" columnDataType="BIGINT"/>
+
+        <!-- Optional constraints (enable if you want them required at DB level) -->
+        <!-- <addNotNullConstraint tableName="task" columnName="title" columnDataType="VARCHAR(255)"/> -->
+        <!-- <addNotNullConstraint tableName="task" columnName="created_at" columnDataType="TIMESTAMP"/> -->
+        <!-- <addNotNullConstraint tableName="task" columnName="is_completed" columnDataType="BOOLEAN"/> -->
+
+        <rollback>
+            <!-- reverse in opposite order -->
+            <!-- <dropNotNullConstraint tableName="task" columnName="is_completed" columnDataType="BOOLEAN"/> -->
+            <!-- <dropNotNullConstraint tableName="task" columnName="created_at" columnDataType="TIMESTAMP"/> -->
+            <!-- <dropNotNullConstraint tableName="task" columnName="title" columnDataType="VARCHAR(255)"/> -->
+            <dropNotNullConstraint tableName="task" columnName="app_user_id" columnDataType="BIGINT"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 3) DEFAULTS ONLY (optional but common) -->
+    <changeSet id="002-03-defaults-task" author="you">
+        <!-- If you want default false instead of null -->
+        <addDefaultValue tableName="task" columnName="is_completed" columnDataType="BOOLEAN" defaultValueBoolean="false"/>
+
+        <!-- If you want DB-managed timestamps, enable these (DB-specific support varies) -->
+        <!-- <addDefaultValue tableName="task" columnName="created_at" columnDataType="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP"/> -->
+
+        <rollback>
+            <!-- <dropDefaultValue tableName="task" columnName="created_at" columnDataType="TIMESTAMP"/> -->
+            <dropDefaultValue tableName="task" columnName="is_completed" columnDataType="BOOLEAN"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 4) FOREIGN KEY ONLY -->
+    <changeSet id="002-04-fk-task-app-user" author="you">
+        <addForeignKeyConstraint
+                baseTableName="task"
+                baseColumnNames="app_user_id"
+                referencedTableName="app_user"
+                referencedColumnNames="id"
+                constraintName="fk_task_app_user"
+                onDelete="CASCADE"/>
+
+        <rollback>
+            <dropForeignKeyConstraint baseTableName="task" constraintName="fk_task_app_user"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 5) INDEXES ONLY -->
+    <changeSet id="002-05-indexes-task" author="you">
+        <!-- Most important index for ManyToOne joins -->
+        <createIndex tableName="task" indexName="idx_task_app_user_id">
+            <column name="app_user_id"/>
+        </createIndex>
+
+        <!-- Optional, depends on your queries -->
+        <createIndex tableName="task" indexName="idx_task_is_completed">
+            <column name="is_completed"/>
+        </createIndex>
+
+        <createIndex tableName="task" indexName="idx_task_created_at">
+            <column name="created_at"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="task" indexName="idx_task_created_at"/>
+            <dropIndex tableName="task" indexName="idx_task_is_completed"/>
+            <dropIndex tableName="task" indexName="idx_task_app_user_id"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

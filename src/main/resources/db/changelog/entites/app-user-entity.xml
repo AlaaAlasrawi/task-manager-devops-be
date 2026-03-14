@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+          http://www.liquibase.org/xml/ns/dbchangelog
+          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!-- 1) TABLE ONLY -->
+    <changeSet id="001-01-create-table-app-user" author="you">
+        <createTable tableName="app_user">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+
+            <column name="username" type="VARCHAR(255)"/>
+            <column name="password" type="VARCHAR(255)"/>
+            <column name="email" type="VARCHAR(255)"/>
+
+            <column name="created_at" type="TIMESTAMP"/>
+            <column name="updated_at" type="TIMESTAMP"/>
+        </createTable>
+
+        <rollback>
+            <dropTable tableName="app_user"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 2) NOT NULL CONSTRAINTS ONLY (adjust as you prefer) -->
+    <changeSet id="001-02-not-null-app-user" author="you">
+        <!-- If you want these required -->
+        <addNotNullConstraint tableName="app_user" columnName="username" columnDataType="VARCHAR(255)"/>
+        <addNotNullConstraint tableName="app_user" columnName="password" columnDataType="VARCHAR(255)"/>
+        <addNotNullConstraint tableName="app_user" columnName="email" columnDataType="VARCHAR(255)"/>
+
+        <!-- Often good to require created_at -->
+        <addNotNullConstraint tableName="app_user" columnName="created_at" columnDataType="TIMESTAMP"/>
+
+        <rollback>
+            <dropNotNullConstraint tableName="app_user" columnName="created_at" columnDataType="TIMESTAMP"/>
+            <dropNotNullConstraint tableName="app_user" columnName="email" columnDataType="VARCHAR(255)"/>
+            <dropNotNullConstraint tableName="app_user" columnName="password" columnDataType="VARCHAR(255)"/>
+            <dropNotNullConstraint tableName="app_user" columnName="username" columnDataType="VARCHAR(255)"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 3) UNIQUE CONSTRAINTS ONLY -->
+    <changeSet id="001-03-unique-app-user" author="you">
+        <!-- Typical choices: username and email unique -->
+        <addUniqueConstraint
+                tableName="app_user"
+                columnNames="username"
+                constraintName="uk_app_user_username"/>
+
+        <addUniqueConstraint
+                tableName="app_user"
+                columnNames="email"
+                constraintName="uk_app_user_email"/>
+
+        <rollback>
+            <dropUniqueConstraint tableName="app_user" constraintName="uk_app_user_email"/>
+            <dropUniqueConstraint tableName="app_user" constraintName="uk_app_user_username"/>
+        </rollback>
+    </changeSet>
+
+    <!-- 4) INDEXES ONLY -->
+    <changeSet id="001-04-indexes-app-user" author="you">
+        <!-- Even if username/email are unique, indexes still exist; this is mostly useful
+             if you decide NOT to make them unique, or you want extra indexes. -->
+        <createIndex tableName="app_user" indexName="idx_app_user_username">
+            <column name="username"/>
+        </createIndex>
+
+        <createIndex tableName="app_user" indexName="idx_app_user_email">
+            <column name="email"/>
+        </createIndex>
+
+        <createIndex tableName="app_user" indexName="idx_app_user_created_at">
+            <column name="created_at"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex tableName="app_user" indexName="idx_app_user_created_at"/>
+            <dropIndex tableName="app_user" indexName="idx_app_user_email"/>
+            <dropIndex tableName="app_user" indexName="idx_app_user_username"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>
