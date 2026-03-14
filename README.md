@@ -1,1 +1,1 @@
-##A backend service for a Task Manager application built with Spring Boot. This project is also designed as a beginner DevOps project to practice backend development, database management, testing, and CI/CD workflows.
+## A backend service for a Task Manager application built with Spring Boot. This project is also designed as a beginner DevOps project to practice backend development, database management, testing, and CI/CD workflows.
