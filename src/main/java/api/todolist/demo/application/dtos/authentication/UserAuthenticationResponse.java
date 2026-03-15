@@ -1,4 +1,4 @@
-package api.todolist.demo.application.dtos.register;
+package api.todolist.demo.application.dtos.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,6 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterRequest {
-    private String username;
-    private String password;
-    private String email;
+public class UserAuthenticationResponse {
+    private String token;
 }
